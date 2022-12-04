@@ -8,7 +8,7 @@ for line in lines:
     elfs = line.split(",")
     elfs = [elfs[0].split("-"), elfs[1].split("-")]
 
-    if (int(elfs[0][0]) <= int(elfs[1][0]) and int(elfs[0][1]) >= int(elfs[1][1])) or (int(elfs[0][0]) >= int(elfs[1][0]) and int(elfs[0][1]) <= int(elfs[1][1])):
+    if (int(elfs[0][1]) >= int(elfs[1][0]) and int(elfs[0][0]) <= int(elfs[1][1])):
         ans += 1
 print(ans)
-submit(ans, part="a", day=4, year=2022)
+submit(ans, part="b", day=4, year=2022)
