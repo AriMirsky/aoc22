@@ -1,8 +1,9 @@
 from aocd import get_data, submit
 
 
-def move(stacks, fromindex, toindex):
-    stacks[toindex].append(stacks[fromindex].pop())
+def move(stacks, fromindex, toindex, count):
+    stacks[toindex] = stacks[toindex] + stacks[fromindex][-count:]
+    stacks[fromindex] = stacks[fromindex][:-count]
     return stacks
 
 
@@ -25,7 +26,7 @@ linesparsed = 0
 for line in lines:
     if linesparsed >= inputlines:  # FIXED
         break
-    for i in range(1, 9*4, 4):  # FIXED
+    for i in range(1, len(stacks)*4, 4):  # FIXED
         # print(stacks)
         if line[i] != " ":
             stacks[int(i/4)].append(line[i])
@@ -43,9 +44,8 @@ for line in lines:
         fromindex = int(nums[3]) - 1
         toindex = int(nums[5]) - 1
         print(count, fromindex, toindex)
-        for i in range(count):
-            stacks = move(stacks, fromindex, toindex)
-            print(stacks)
+        stacks = move(stacks, fromindex, toindex, count)
+        print(stacks)
     linesparsed += 1
 
 for stack in stacks:
@@ -57,4 +57,4 @@ for stack in stacks:
         ans += " "
 
 print(ans)
-submit(ans, part="a", day=5, year=2022)
+submit(ans, part="b", day=5, year=2022)
