@@ -7,15 +7,15 @@ lines = input.split("\n")
 ans = 0
 for i in range(len(input) - 3):
     newpacket = True
-    for j in range(4):
-        for k in range(4):
+    for j in range(14):
+        for k in range(14):
             if j == k:
                 continue
             if input[i+j] == input[i+k]:
                 newpacket = False
     if newpacket:
-        ans = i + 4
+        ans = i + 14
         break
 
 print(ans)
-submit(ans, part="a", day=6, year=2022)
+submit(ans, part="b", day=6, year=2022)
