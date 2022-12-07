@@ -97,8 +97,20 @@ def appendAllFolders(currd, ans):
     return ans + thisfoldersize
 
 
-ans = appendAllFolders(root, 0)
+minfoldersize = 70000000
+delneeded = size(root) - 40000000
+
+
+def findminfolder(currd, minfoldersize):
+    if size(currd) < minfoldersize and size(currd) >= delneeded:
+        minfoldersize = size(currd)
+    for folder in currd.subfolders:
+        minfoldersize = findminfolder(folder, minfoldersize)
+    return minfoldersize
+
+
+ans = findminfolder(root, minfoldersize)
 
 
 print(ans)
-submit(ans, part="a", day=7, year=2022)
+submit(ans, part="b", day=7, year=2022)
