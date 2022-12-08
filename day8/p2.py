@@ -42,10 +42,41 @@ def isVisible(trees, x, y):
     return visible
 
 
+def scenicScore(trees, x, y):
+    origx = x
+    origy = y
+    left = 0
+    for i in range(x-1, -1, -1):
+        left += 1
+        if trees[origx][origy] <= trees[i][origy]:
+            break
+
+    right = 0
+    for i in range(x + 1, len(trees)):
+        right += 1
+        if trees[origx][origy] <= trees[i][origy]:
+            break
+
+    up = 0
+    for i in range(y-1, -1, -1):
+        up += 1
+        if trees[origx][origy] <= trees[origx][i]:
+            break
+
+    down = 0
+    for i in range(y + 1, len(trees[0])):
+        down += 1
+        if trees[origx][origy] <= trees[origx][i]:
+            break
+
+    return left * right * up * down
+
+
+maxscore = 0
 for r, row in enumerate(trees):
     for c, col in enumerate(row):
-        if isVisible(trees, r, c):
-            ans += 1
+        if scenicScore(trees, r, c) > maxscore:
+            maxscore = scenicScore(trees, r, c)
 
-print(ans)
-submit(ans, part="a", day=8, year=2022)
+print(maxscore)
+#submit(ans, part="b", day=8, year=2022)
