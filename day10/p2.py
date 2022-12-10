@@ -155,7 +155,7 @@ addx -5"""
 
 lines = input.split("\n")
 
-ans = 0
+ans = ""
 cycles = 0
 x = 1
 
@@ -166,26 +166,33 @@ def checkCycle(cycle, x):
     return cycle * x
 
 
+def renderPixel(cycle, x, ans):
+    pixel = ""
+    if (cycle-1) % 40 == x - 1 or (cycle-1) % 40 == x or (cycle-1) % 40 == x + 1:
+        pixel = "#"
+    else:
+        pixel = "."
+
+    if (cycle - 1) % 40 == 0:
+        ans += "\n"
+    ans += pixel
+    return ans
+
+
 for line in lines:
     # print("line")
     cmd = line.split(" ")
     if "noop" == cmd[0]:
         #print(cmd, x)
         cycles += 1
-        cyclecheck = checkCycle(cycles, x)
-        if cyclecheck is not None:
-            ans += cyclecheck
+        ans = renderPixel(cycles, x, ans)
     elif "addx" == cmd[0]:
         #print(cmd, x)
         cycles += 1
-        cyclecheck = checkCycle(cycles, x)
-        if cyclecheck is not None:
-            ans += cyclecheck
+        ans = renderPixel(cycles, x, ans)
         cycles += 1
-        cyclecheck = checkCycle(cycles, x)
-        if cyclecheck is not None:
-            ans += cyclecheck
+        ans = renderPixel(cycles, x, ans)
         x += int(cmd[1])
 
 print(ans)
-submit(ans, part="a", day=10, year=2022)
+#submit(ans, part="b", day=10, year=2022)
