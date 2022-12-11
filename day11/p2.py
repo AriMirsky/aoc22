@@ -1,4 +1,5 @@
 from aocd import get_data, submit
+from math import gcd
 
 input = get_data(day=11, year=2022)
 input2 = """Monkey 0:
@@ -33,12 +34,13 @@ lines = input.split("\n")
 
 
 class Monkey():
-    def __init__(self, items, operation, test, iftrue, iffalse):
+    def __init__(self, items, operation, test, iftrue, iffalse, testDivis):
         self.items = items
         self.operation = operation
         self.test = test
         self.iftrue = iftrue
         self.iffalse = iffalse
+        self.testDivis = testDivis
 
 
 ans = 0
@@ -49,6 +51,7 @@ currOperation = None
 currTest = None
 currIfTrue = None
 currIfFalse = None
+currTestDivis = None
 for line in lines:
     cmds = line.split(" ")
     # print(cmds)
@@ -57,7 +60,7 @@ for line in lines:
         continue
     if not(len(line) > 0 and line[0:2] == "  "):
         monkeys.append(Monkey(currItems, currOperation,
-                       currTest, currIfTrue, currIfFalse))
+                       currTest, currIfTrue, currIfFalse, currTestDivis))
         continue
     # Indent
     cmds = cmds[2:]
@@ -98,6 +101,8 @@ for line in lines:
             return closure
         op = op(num)
         currTest = op
+
+        currTestDivis = num
     else:
         cmds = cmds[3:]
         # print(cmds)
@@ -107,20 +112,25 @@ for line in lines:
             currIfFalse = int(cmds[4])
 
 monkeys.append(Monkey(currItems, currOperation,
-               currTest, currIfTrue, currIfFalse))
+               currTest, currIfTrue, currIfFalse, currTestDivis))
 
 inspects = [0] * len(monkeys)
 
+divistestnums = [0] * len(monkeys)
 
-for round in range(20):
+for i, monkey in enumerate(monkeys):
+    divistestnums[i] = monkey.testDivis
+
+lcm = 1
+for i in divistestnums:
+    lcm = lcm*i//gcd(lcm, i)
+
+for round in range(10000):
     for monkeyi, monkey in enumerate(monkeys):
         while 0 < len(monkey.items):
             # print(monkey.items[0])
-            monkey.items[0] = monkey.operation(monkey.items[0])
+            monkey.items[0] = monkey.operation(monkey.items[0]) % lcm
             inspects[monkeyi] += 1
-
-            # print(monkey.items[0])
-            monkey.items[0] //= 3
 
             # print(monkey.items[0])
             currItem = monkey.items[0]
@@ -149,4 +159,4 @@ ans = max * max2
 
 # print(inspects)
 print(ans)
-submit(ans, part="a", day=11, year=2022)
+submit(ans, part="b", day=11, year=2022)
