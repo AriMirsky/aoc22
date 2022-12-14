@@ -1,6 +1,14 @@
 from aocd import get_data, submit
 
 input = get_data(day=9, year=2022)
+input = """R 5
+U 8
+L 8
+D 3
+R 17
+D 10
+L 25
+U 20"""
 lines = input.split("\n")
 
 
@@ -29,6 +37,9 @@ class Rope():
     def tailPos(self):
         return [self.tail[0], self.tail[1]]
 
+    def headPos(self):
+        return [self.head[0], self.head[1]]
+
 
 def dirConversion(dir):
     if dir == "R":
@@ -42,9 +53,9 @@ def dirConversion(dir):
 
 
 ans = 0
-ropes = [Rope() for _ in range(10)]
-prevPrevPoss = [[0, 0] for _ in range(10)]
-prevPoss = [[0, 0] for _ in range(10)]
+ropes = [Rope() for _ in range(9)]
+prevPrevPoss = [[0, 0] for _ in range(9)]
+prevPoss = [[0, 0] for _ in range(9)]
 reached = set()
 reached.add((0, 0))
 for line in lines:
@@ -53,18 +64,16 @@ for line in lines:
         ropes[0].move(dirConversion(cmds[0]))
         print(cmds)
         print(dirConversion(cmds[0]))
-        for i in range(1, 10):
-            ropes[i].move([-prevPrevPoss[i - 1][0] + ropes[i - 1].tailPos()
-                          [0], -prevPrevPoss[i - 1][1] + ropes[i - 1].tailPos()[1]])
-            print([-prevPrevPoss[i - 1][0] + ropes[i - 1].tailPos()
-                   [0], -prevPrevPoss[i - 1][1] + ropes[i - 1].tailPos()[1]])
-        for i in range(10):
-            prevPrevPoss[i] = prevPoss[i]
-            prevPoss[i] = ropes[i].tailPos()
-            print(ropes[i].tail, ropes[i].head,
-                  "     ", prevPrevPoss[i], prevPoss[i])
+        for i in range(1, 9):
+            ropes[i].move([ropes[i - 1].tailPos()[0] - ropes[i].headPos()
+                          [0], ropes[i - 1].tailPos()[1] - ropes[i].headPos()[1]])
+            print([ropes[i - 1].tailPos()[0] - ropes[i].headPos()[0],
+                  ropes[i - 1].tailPos()[1] - ropes[i].headPos()[1]])
+        for i in range(9):
+            print(ropes[i].tail, ropes[i].head)
         print()
-        reached.add(tuple(ropes[9].tailPos()))
+        reached.add(tuple(ropes[8].tailPos()))
 ans = len(reached)
+print(reached)
 print(ans)
 #submit(ans, part="b", day=9, year=2022)
